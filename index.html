@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HimanshuNimje.com - Salesforce Learning Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #0070f3;
+            --secondary-color: #00d4ff;
+            --accent-color: #ff6b35;
+            --text-dark: #333;
+            --text-light: #666;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: var(--bg-white);
+            border-bottom: 2px solid var(--border-color);
+            margin: 2rem 0;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: var(--text-light);
+        }
+
+        .nav-tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: var(--bg-light);
+        }
+
+        .tab-content {
+            display: none;
+            background: var(--bg-white);
+            padding: 2rem;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--bg-white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        }
+
+        .card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transition: width 0.3s ease;
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--accent-color);
+        }
+
+        .btn-secondary:hover {
+            background: #e55a2b;
+        }
+
+        .question-card {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .question-difficulty {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .easy { background: #d1fae5; color: #065f46; }
+        .medium { background: #fef3c7; color: #92400e; }
+        .hard { background: #fecaca; color: #991b1b; }
+
+        .resource-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .resource-item:hover {
+            background: var(--border-color);
+        }
+
+        .resource-info h4 {
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+
+        .resource-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .platform-tag {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .linkedin { background: #e7f3ff; color: #0a66c2; }
+        .youtube { background: #ffeaea; color: #ff0000; }
+        .instagram { background: #fef7ff; color: #e4405f; }
+
+        .add-resource-form {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .study-timer {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .timer-display {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 1rem 0;
+        }
+
+        .timer-controls button {
+            margin: 0 0.5rem;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .topic-card {
+            background: var(--bg-white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .topic-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .topic-card.completed {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            border-color: var(--success-color);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .timer-display {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>HimanshuNimje.com</h1>
+            <p>Your Ultimate Salesforce Learning & Interview Prep Hub</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('dashboard')">📊 Dashboard</button>
+            <button class="nav-tab" onclick="showTab('learning')">📚 Learning</button>
+            <button class="nav-tab" onclick="showTab('interview')">💼 Interview Prep</button>
+            <button class="nav-tab" onclick="showTab('resources')">🔗 Saved Resources</button>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="studyStreak">15</div>
+                    <div>Day Study Streak</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="topicsCompleted">42</div>
+                    <div>Topics Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="savedResources">127</div>
+                    <div>Saved Resources</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="studyHours">89</div>
+                    <div>Study Hours</div>
+                </div>
+            </div>
+
+            <div class="study-timer">
+                <h3>📖 Study Session Timer</h3>
+                <div class="timer-display" id="timerDisplay">25:00</div>
+                <div class="timer-controls">
+                    <button class="btn" onclick="startTimer()">▶️ Start</button>
+                    <button class="btn btn-secondary" onclick="pauseTimer()">⏸️ Pause</button>
+                    <button class="btn" onclick="resetTimer()">🔄 Reset</button>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>🎯 Current Goals</h3>
+                    <p><strong>Salesforce Admin Certification</strong></p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 68%"></div>
+                    </div>
+                    <p>68% Complete</p>
+                    <button class="btn" style="margin-top: 1rem;">Continue Learning</button>
+                </div>
+
+                <div class="card">
+                    <h3>⚡ Quick Actions</h3>
+                    <button class="btn" style="margin: 0.5rem 0; width: 100%;" onclick="showTab('learning')">Start Learning Session</button>
+                    <button class="btn btn-secondary" style="margin: 0.5rem 0; width: 100%;" onclick="showTab('interview')">Practice Interview</button>
+                    <button class="btn" style="margin: 0.5rem 0; width: 100%;" onclick="showTab('resources')">Add New Resource</button>
+                </div>
+
+                <div class="card">
+                    <h3>📈 Recent Activity</h3>
+                    <ul style="list-style: none;">
+                        <li style="margin: 0.5rem 0;">✅ Completed "Apex Triggers" topic</li>
+                        <li style="margin: 0.5rem 0;">🔗 Saved 3 YouTube tutorials</li>
+                        <li style="margin: 0.5rem 0;">💼 Practiced 5 interview questions</li>
+                        <li style="margin: 0.5rem 0;">📚 Studied for 2.5 hours</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Learning Tab -->
+        <div id="learning" class="tab-content">
+            <h2 style="margin-bottom: 2rem; color: var(--primary-color);">📚 Salesforce Learning Paths</h2>
+            
+            <div class="topics-grid">
+                <div class="topic-card completed">
+                    <h3>🔧 Salesforce Basics</h3>
+                    <p>Objects, Fields, Records, Relationships</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <span style="color: var(--success-color); font-weight: 500;">✅ Completed</span>
+                </div>
+
+                <div class="topic-card">
+                    <h3>👤 User Management</h3>
+                    <p>Profiles, Roles, Permission Sets</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%"></div>
+                    </div>
+                    <span style="color: var(--warning-color); font-weight: 500;">🔄 In Progress (75%)</span>
+                </div>
+
+                <div class="topic-card">
+                    <h3>🔐 Security & Sharing</h3>
+                    <p>OWD, Sharing Rules, Field-Level Security</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 30%"></div>
+                    </div>
+                    <span style="color: var(--text-light); font-weight: 500;">📖 Started (30%)</span>
+                </div>
+
+                <div class="topic-card">
+                    <h3>⚙️ Process Automation</h3>
+                    <p>Workflows, Process Builder, Flow</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <span style="color: var(--text-light); font-weight: 500;">📋 Not Started</span>
+                </div>
+
+                <div class="topic-card">
+                    <h3>💻 Apex Programming</h3>
+                    <p>Classes, Triggers, SOQL/SOSL</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 45%"></div>
+                    </div>
+                    <span style="color: var(--warning-color); font-weight: 500;">🔄 In Progress (45%)</span>
+                </div>
+
+                <div class="topic-card">
+                    <h3>🎨 Lightning Development</h3>
+                    <p>Components, Aura, LWC</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <span style="color: var(--text-light); font-weight: 500;">📋 Not Started</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interview Prep Tab -->
+        <div id="interview" class="tab-content">
+            <h2 style="margin-bottom: 2rem; color: var(--primary-color);">💼 Interview Preparation</h2>
+            
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>🎯 Practice Session</h3>
+                    <p>Random questions from your weak areas</p>
+                    <button class="btn" style="margin-top: 1rem;">Start Practice</button>
+                </div>
+                <div class="card">
+                    <h3>📊 Performance Stats</h3>
+                    <p><strong>Questions Practiced:</strong> 247</p>
+                    <p><strong>Accuracy Rate:</strong> 78%</p>
+                    <p><strong>Avg. Response Time:</strong> 2.3 min</p>
+                </div>
+            </div>
+
+            <h3 style="margin: 2rem 0 1rem 0;">Common Salesforce Interview Questions</h3>
+            
+            <div class="question-card">
+                <div class="question-title">What is the difference between Role and Profile in Salesforce?</div>
+                <span class="question-difficulty easy">Easy</span>
+                <p>A fundamental question about Salesforce security model. Profiles control what users can do, while Roles control what records they can see.</p>
+                <button class="btn" style="margin-top: 1rem;">View Answer</button>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title">Explain the Order of Execution in Salesforce</div>
+                <span class="question-difficulty medium">Medium</span>
+                <p>Detailed understanding of how Salesforce processes records, including triggers, validation rules, and workflows.</p>
+                <button class="btn" style="margin-top: 1rem;">View Answer</button>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title">How would you handle governor limits in a bulk operation scenario?</div>
+                <span class="question-difficulty hard">Hard</span>
+                <p>Advanced question testing knowledge of Salesforce limits and bulk processing best practices.</p>
+                <button class="btn" style="margin-top: 1rem;">View Answer</button>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title">What are the different types of Salesforce Clouds?</div>
+                <span class="question-difficulty easy">Easy</span>
+                <p>Basic knowledge of Salesforce ecosystem including Sales Cloud, Service Cloud, Marketing Cloud, etc.</p>
+                <button class="btn" style="margin-top: 1rem;">View Answer</button>
+            </div>
+        </div>
+
+        <!-- Resources Tab -->
+        <div id="resources" class="tab-content">
+            <h2 style="margin-bottom: 2rem; color: var(--primary-color);">🔗 Saved Resources</h2>
+            
+            <div class="add-resource-form">
+                <h3 style="margin-bottom: 1rem;">➕ Add New Resource</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Resource Title</label>
+                        <input type="text" id="resourceTitle" placeholder="e.g., Salesforce Apex Best Practices">
+                    </div>
+                    <div class="form-group">
+                        <label>Platform</label>
+                        <select id="resourcePlatform">
+                            <option value="youtube">YouTube</option>
+                            <option value="linkedin">LinkedIn</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>URL</label>
+                    <input type="url" id="resourceUrl" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>Notes (Optional)</label>
+                    <textarea id="resourceNotes" rows="2" placeholder="Why is this resource useful?"></textarea>
+                </div>
+                <button class="btn" onclick="addResource()">💾 Save Resource</button>
+            </div>
+
+            <div id="resourcesList">
+                <div class="resource-item">
+                    <div class="resource-info">
+                        <h4>Salesforce Apex Triggers Tutorial</h4>
+                        <p>Comprehensive guide to writing and testing Apex triggers</p>
+                    </div>
+                    <div>
+                        <span class="platform-tag youtube">YouTube</span>
+                        <button class="btn" style="margin-left: 1rem;">🔗 Open</button>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <div class="resource-info">
+                        <h4>Salesforce Admin Interview Tips</h4>
+                        <p>LinkedIn post with practical interview advice from hiring managers</p>
+                    </div>
+                    <div>
+                        <span class="platform-tag linkedin">LinkedIn</span>
+                        <button class="btn" style="margin-left: 1rem;">🔗 Open</button>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <div class="resource-info">
+                        <h4>Salesforce Flow Builder Tips</h4>
+                        <p>Instagram carousel post with quick Flow best practices</p>
+                    </div>
+                    <div>
+                        <span class="platform-tag instagram">Instagram</span>
+                        <button class="btn" style="margin-left: 1rem;">🔗 Open</button>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <div class="resource-info">
+                        <h4>Advanced SOQL Queries Explained</h4>
+                        <p>Deep dive into complex SOQL patterns and optimization techniques</p>
+                    </div>
+                    <div>
+                        <span class="platform-tag youtube">YouTube</span>
+                        <button class="btn" style="margin-left: 1rem;">🔗 Open</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all nav tabs
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+        }
+
+        // Timer functionality
+        let timerInterval;
+        let timeLeft = 25 * 60; // 25 minutes in seconds
+        let isRunning = false;
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timerDisplay').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                timerInterval = setInterval(() => {
+                    if (timeLeft > 0) {
+                        timeLeft--;
+                        updateTimerDisplay();
+                    } else {
+                        // Timer finished
+                        clearInterval(timerInterval);
+                        isRunning = false;
+                        alert('🎉 Study session completed! Great job!');
+                        resetTimer();
+                    }
+                }, 1000);
+            }
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            timeLeft = 25 * 60;
+            updateTimerDisplay();
+        }
+
+        // Resource management
+        let resources = [];
+
+        function addResource() {
+            const title = document.getElementById('resourceTitle').value;
+            const platform = document.getElementById('resourcePlatform').value;
+            const url = document.getElementById('resourceUrl').value;
+            const notes = document.getElementById('resourceNotes').value;
+
+            if (title && url) {
+                const resource = {
+                    id: Date.now(),
+                    title,
+                    platform,
+                    url,
+                    notes
+                };
+
+                resources.push(resource);
+                addResourceToDOM(resource);
+                
+                // Clear form
+                document.getElementById('resourceTitle').value = '';
+                document.getElementById('resourceUrl').value = '';
+                document.getElementById('resourceNotes').value = '';
+                
+                // Update stats
+                updateStats();
+                
+                alert('✅ Resource saved successfully!');
+            } else {
+                alert('Please fill in at least the title and URL fields.');
+            }
+        }
+
+        function addResourceToDOM(resource) {
+            const resourcesList = document.getElementById('resourcesList');
+            const resourceItem = document.createElement('div');
+            resourceItem.className = 'resource-item';
+            resourceItem.innerHTML = `
+                <div class="resource-info">
+                    <h4>${resource.title}</h4>
+                    <p>${resource.notes || 'No notes added'}</p>
+                </div>
+                <div>
+                    <span class="platform-tag ${resource.platform}">${resource.platform}</span>
+                    <button class="btn" style="margin-left: 1rem;" onclick="window.open('${resource.url}', '_blank')">🔗 Open</button>
+                </div>
+            `;
+            resourcesList.appendChild(resourceItem);
+        }
+
+        function updateStats() {
+            document.getElementById('savedResources').textContent = 127 + resources.length;
+        }
+
+        // Topic click functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const topicCards = document.querySelectorAll('.topic-card');
+            topicCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const topicTitle = this.querySelector('h3').textContent;
+                    alert(`📚 Starting learning session for: ${topicTitle}\n\nThis would open detailed learning materials and exercises.`);
+                });
+            });
+        });
+
+        // Initialize timer display
+        updateTimerDisplay();
+    </script>
+</body>
+</html>
